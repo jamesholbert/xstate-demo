@@ -1,4 +1,4 @@
-import { Machine, assign, send } from "xstate";
+import { Machine, assign } from "xstate";
 
 const hasElectricity = (context, _event) => context.hasElectricity
 const switchIsOn = (context, _event) => context.switchIsOn

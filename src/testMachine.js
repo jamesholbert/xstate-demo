@@ -1,11 +1,14 @@
 const { Machine, assign, send } = require("xstate");
 
+const logAction = assign({
+  actions: context => context.actions + 1
+})
+
 const testMachine = Machine({
   id: "main",
   initial: "electricityOnAndSwitchOff",
   context: {
-    switchIsOn: false,
-    hasElectricity: true
+    actions: 0
   },
   states: {
     electricityOnAndSwitchOff: {
@@ -17,9 +20,18 @@ const testMachine = Machine({
         },
       },
       on: {
-        TOGGLE: "on",
-        FLIP_BREAKER: "electricityOffAndSwitchOff",
-        TOUCH_LIGHT: "broken"
+        TOGGLE: {
+          target: "on",
+          actions: logAction
+        },
+        FLIP_BREAKER: {
+          target: "electricityOffAndSwitchOff",
+          actions: logAction
+        },
+        TOUCH_LIGHT: {
+          target: "broken",
+          actions: logAction
+        }
       },
     },
     electricityOffAndSwitchOn: {
@@ -31,9 +43,18 @@ const testMachine = Machine({
         },
       },
       on: {
-        TOGGLE: "electricityOffAndSwitchOff",
-        FLIP_BREAKER: "on",
-        TOUCH_LIGHT: "broken"
+        TOGGLE: {
+          target: "electricityOffAndSwitchOff",
+          actions: logAction
+        },
+        FLIP_BREAKER: {
+          target: "on",
+          actions: logAction
+        },
+        TOUCH_LIGHT: {
+          target: "broken",
+          actions: logAction
+        }
       },
     },
     electricityOffAndSwitchOff: {
@@ -45,9 +66,18 @@ const testMachine = Machine({
         },
       },
       on: {
-        TOGGLE: "electricityOffAndSwitchOn",
-        FLIP_BREAKER: "electricityOnAndSwitchOff",
-        TOUCH_LIGHT: "broken"
+        TOGGLE: {
+          target: "electricityOffAndSwitchOn",
+          actions: logAction
+        },
+        FLIP_BREAKER: {
+          target: "electricityOnAndSwitchOff",
+          actions: logAction
+        },
+        TOUCH_LIGHT: {
+          target: "broken",
+          actions: logAction
+        }
       },
     },
     on: {
@@ -58,9 +88,18 @@ const testMachine = Machine({
         },
       },
       on: {
-        TOGGLE: "electricityOnAndSwitchOff",
-        FLIP_BREAKER: "electricityOffAndSwitchOn",
-        TOUCH_LIGHT: "broken"
+        TOGGLE: {
+          target: "electricityOnAndSwitchOff",
+          actions: logAction
+        },
+        FLIP_BREAKER: {
+          target: "electricityOffAndSwitchOn",
+          actions: logAction
+        },
+        TOUCH_LIGHT: {
+          target: "broken",
+          actions: logAction
+        }
       }
     },
     broken: {
