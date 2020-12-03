@@ -18,37 +18,33 @@ describe("light switch", () => {
     },
   });
 
-  // this lets you generate a filter that limits the number of "paths" (or tests) generated so you don't have a stack overflow
-  // let's stay friends and leave a limit to this; to quote Count Rugan: "Not to 50!" (please not even to 20 :grimacing:)
-  const withActionCountLessThan = count => state => state.context.actions < count;
-  // this lets you generate a filter that will limit "paths" to only include those with a given number of actions
-  const withActionCounts = array => path => array.includes(path.state.context.actions);
-  // this lets you generate a filter to will limit "paths" to only include those that end in a given state
-  const endsInState = state => path => path.state.matches(state)
+  // generate all tests for every combination of state transitions
+  const testPlans = testModel.getSimplePathPlans();
 
-// console.log(testModel)
-  // change one or more of the filter method params below to experiment with how many tests are automatically generated
+
+  // get all possible paths to the `broken` state
+  // const testPlans = testModel.getSimplePathPlansTo(
+  //   state => state.matches("broken")
+  // );
+
+  // get all possible paths where every state/transition keeps the `hasElectricity` context value as truthy
   // const testPlans = testModel.getSimplePathPlans({
-  //   filter: withActionCountLessThan(10)
+  //   filter: state => state.context.hasElectricity
   // });
 
-  // if you have a lot of possible paths in your app and `getSimplePathPlans` generates too many paths, 
-  // try this, but you'll probably want to comment out the `withActionCounts` filter below
 
-  const testPlans = testModel.getSimplePathPlansTo(
-    state => state.matches("broken")
-  );
-  // const testPlans = testModel.getSimplePathPlans({
-  //   filter: withActionCountLessThan(10)
-  // });
+  // the `getShortestPathPlans` method can end up missing states if you aren't careful
+  // const testPlans = testModel.getShortestPathPlans();
+
+  // const testPlans = testModel.getShortestPathPlansTo(
+  //   state => state.matches("broken")
+  // );
 
   console.log(`Total tests generated: ${testPlans.reduce((a, c) => a += c.paths.length, 0)}`);
 
   testPlans.forEach((plan, planNumber) => {
     describe(plan.description, () => {
       plan.paths
-        // .filter(withActionCounts([3, 4])) // this probably isn't necessary if you are using `getShortestPathPlans`
-        // .filter(endsInState("broken"))
         .forEach((path, i) => {
           it(
             path.description,

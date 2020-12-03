@@ -1,84 +1,58 @@
-const { Machine, assign, send } = require("xstate");
+const { Machine, assign } = require("xstate");
 
-const logAction = assign({
-  actions: context => context.actions + 1
-})
+const hasElectricity = (context, _event) => context.hasElectricity
+const switchIsOn = (context, _event) => context.switchIsOn
 
+const toggleSwitchContext = assign({
+  switchIsOn: (context) => !context.switchIsOn
+});
+const flipBreakerContext = assign({
+  hasElectricity: (context) => !context.hasElectricity   
+});
+
+const switchSelector = state => `.switch.${state.context.switchIsOn ? "switch-on" : "switch-off"}`;
+const breakerSelector = state => `.breaker.${state.context.hasElectricity ? "electricity" : "no-electricity"}`
+const roomSelector = state => `.room.${state.matches("on") ? "lit" : "unlit"}`;
+  
 const testMachine = Machine({
   id: "main",
-  initial: "electricityOnAndSwitchOff",
-  // context: {
-  //   actions: 0
-  // },
+  initial: "off",
+  context: {
+    hasElectricity: true,
+    switchIsOn: false
+  },
   states: {
-    electricityOnAndSwitchOff: {
+    off: {
       meta: {
-        test: async page => {
-          await page.waitForSelector('.switch.switch-off');
-          await page.waitForSelector('.breaker.electricity');
-          await page.waitForSelector('.room.unlit');
+        test: async (page, state) => {
+          await page.waitForSelector(switchSelector(state));
+          await page.waitForSelector(breakerSelector(state));
+          await page.waitForSelector(roomSelector(state));
         },
       },
       on: {
-        TOGGLE: {
-          target: "on",
-          // actions: logAction
-        },
-        FLIP_BREAKER: {
-          target: "electricityOffAndSwitchOff",
-          // actions: logAction
-        },
-        TOUCH_LIGHT: {
-          target: "broken",
-          // actions: logAction
-        }
-      },
-    },
-    electricityOffAndSwitchOn: {
-      meta: {
-        test: async page => {
-          await page.waitForSelector('.breaker.no-electricity');
-          await page.waitForSelector('.switch.switch-on');
-          await page.waitForSelector('.room.unlit');
-        },
-      },
-      on: {
-        TOGGLE: {
-          target: "electricityOffAndSwitchOff",
-          // actions: logAction
-        },
-        FLIP_BREAKER: {
-          target: "on",
-          // actions: logAction
-        },
-        TOUCH_LIGHT: {
-          target: "broken",
-          // actions: logAction
-        }
-      },
-    },
-    electricityOffAndSwitchOff: {
-      meta: {
-        test: async page => {
-          await page.waitForSelector('.breaker.no-electricity');
-          await page.waitForSelector('.switch.switch-off');
-          await page.waitForSelector('.room.unlit');
-        },
-      },
-      on: {
-        TOGGLE: {
-          target: "electricityOffAndSwitchOn",
-          // actions: logAction
-        },
-        FLIP_BREAKER: {
-          target: "electricityOnAndSwitchOff",
-          // actions: logAction
-        },
-        TOUCH_LIGHT: {
-          target: "broken",
-          // actions: logAction
-        }
-      },
+        TOUCH_LIGHT: "broken",
+        TOGGLE: [
+          {
+            cond: "hasElectricity",
+            actions: "toggleSwitchContext",
+            target: "on"
+          },
+          {
+            actions: "toggleSwitchContext"
+          }
+        ],
+        FLIP_BREAKER: [
+          {
+            cond: "switchIsOn",
+            actions: "flipBreakerContext",
+            target: "on"
+          },
+          {
+            actions: "flipBreakerContext"            
+          }
+        ]
+      }
     },
     on: {
       meta: {
@@ -88,18 +62,19 @@ const testMachine = Machine({
         },
       },
       on: {
+        TOUCH_LIGHT: "broken",
         TOGGLE: {
-          target: "electricityOnAndSwitchOff",
-          // actions: logAction
+          actions: assign({
+            switchIsOn: () => false
+          }),
+          target: "off"
         },
         FLIP_BREAKER: {
-          target: "electricityOffAndSwitchOn",
-          // actions: logAction
+          actions: assign({
+            hasElectricity: () => false
+          }),
+          target: "off"
         },
-        TOUCH_LIGHT: {
-          target: "broken",
-          // actions: logAction
-        }
       }
     },
     broken: {
@@ -111,6 +86,13 @@ const testMachine = Machine({
         },
       },
     }
+  }
+},{
+  guards: {
+    hasElectricity, switchIsOn
+  },
+  actions: {
+    toggleSwitchContext, flipBreakerContext
   }
 });
 
