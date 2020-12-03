@@ -1,69 +1,8 @@
-import React, { useState, useEffect } from "react";
-import './App.css';
+import React from "react";
 
-import { useMachine } from "@xstate/react";
-import uiMachine from "./stateMachine";
+const imageStyles = { height: "250px" };
 
-const App = () => {
-  const [current, send] = useMachine(uiMachine);
-  const { hasElectricity, switchIsOn } = current.context;
-
-  return (
-    <div className={`room ${current.matches("on") ? "lit" : "unlit"}`} style={{ backgroundColor: current.matches("on") ? 'white' : "black" }}>
-      <header className="App-header">
-        <Breaker 
-          on={hasElectricity}
-          onClick={() => send({ type: "FLIP_BREAKER" })}
-        />
-        <Switch 
-          on={switchIsOn}
-          onClick={() => send("TOGGLE")}
-        />
-        <Light 
-          on={current.matches("on")}
-          broken={current.matches("broken")}
-          onClick={() => send("TOUCH")}
-        />
-        {current.matches("broken") && <YouLose />}
-      </header>
-    </div>
-  );
-}
-
-const AppOld = () => {
-  const [switchIsOn, setSwitchIsOn] = useState(false);
-  const [breakerIsOn, setBreakerIsOn] = useState(true);
-  const [broken, setBroken] = useState(false);
-
-  const lightIsOn = switchIsOn && breakerIsOn;
-  const toggle = () => setSwitchIsOn(!switchIsOn);
-  const flipBreaker = () => setBreakerIsOn(!breakerIsOn);
-  const touch = () => setBroken(true);
-
-  return (
-    <div className={`room ${lightIsOn ? "lit" : "unlit"}`} style={{ backgroundColor: lightIsOn ? 'white' : "black" }}>
-      <header className="App-header">
-        <Breaker 
-          on={breakerIsOn}
-          onClick={flipBreaker}
-        />
-        <Switch 
-          on={switchIsOn}
-          onClick={toggle}
-        />
-        <Light
-          broken={broken}
-          on={lightIsOn}
-          onClick={touch}
-        />
-        {broken && <YouLose />}
-      </header>
-    </div>
-  );
-}
-
-
-const Breaker = ({ on, onClick }) => (
+export const Breaker = ({ on, onClick }) => (
   <div style={{ width: "300px", backgroundColor: "white", textAlign: "center" }}>
     <img
       alt="breaker"
@@ -76,7 +15,7 @@ const Breaker = ({ on, onClick }) => (
   </div>
 )
 
-const Switch = ({ on, onClick }) => (
+export const Switch = ({ on, onClick }) => (
   <div style={{ width: "300px", backgroundColor: "white", textAlign: "center" }}>
     <img
       alt="switch"
@@ -89,7 +28,7 @@ const Switch = ({ on, onClick }) => (
   </div>
 )
 
-const Light = ({ on, broken, onClick }) => (
+export const Light = ({ on, broken, onClick }) => (
   <div style={{ width: "300px", backgroundColor: "white", textAlign: "center" }}>
     <img
       alt="light"
@@ -102,53 +41,8 @@ const Light = ({ on, broken, onClick }) => (
   </div>
 )
 
+export const YouWin = () => <div style={{ position: "absolute", top: "1rem", right: "1rem" }}>You win!</div>
 
-const AllStateApp = () => {
-  const [lightIsOn, setLightIsOn] = useState(false);
-  const [switchIsOn, setSwitchIsOn] = useState(false);
-  const [breakerIsOn, setBreakerIsOn] = useState(true);
-  const [broken, setBroken] = useState(false);
-
-  useEffect(() => {
-    setLightIsOn(switchIsOn && breakerIsOn && !broken);
-  }, [switchIsOn, breakerIsOn, broken])
-
-  const toggle = () => setSwitchIsOn(!switchIsOn);
-  const flipBreaker = () => setBreakerIsOn(!breakerIsOn);
-  const touch = () => setBroken(true);
-
-  return (
-    <div style={{ backgroundColor: lightIsOn ? 'white' : "black" }}>
-      <header className="App-header">
-        <Breaker 
-          on={breakerIsOn}
-          onClick={flipBreaker}
-        />
-        <Switch 
-          on={switchIsOn}
-          onClick={toggle}
-        />
-        <Light
-          broken={broken}
-          on={lightIsOn}
-          onClick={touch}
-        />
-        {broken && <YouLose />}
-      </header>
-    </div>
-  );
-}
-
-// export default App;
-export default AppOld;
-
-console.log("ballast" || App)
-console.log("ballast" || AppOld)
-console.log("ballast" || AllStateApp)
-
-const imageStyles = { height: "250px" };
-
-const YouLose = () => <div style={{ position: "absolute", top: "1rem", right: "1rem" }}>You lose!</div>
 
 const breaker = {
   on: "https://lion.ly/2Q7",

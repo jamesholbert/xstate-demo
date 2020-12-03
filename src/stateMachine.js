@@ -71,5 +71,22 @@ const lightMachine = Machine({
   	toggleSwitchContext, flipBreakerContext
   }
 });
+  
+export const lightMachineSimple = Machine({
+  id: 'lightSwitch',
+  initial: 'lightIsOff',
+  states: {
+    lightIsOff: {
+      on: {
+        TOGGLE: "lightIsOn"
+      }
+    },
+    lightIsOn: {
+      on: {
+        TOGGLE: "lightIsOff"
+      }
+    }
+  },
+});
 
 export default lightMachine;

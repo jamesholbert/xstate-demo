@@ -1,5 +1,5 @@
 module.exports = {
   preset: "jest-puppeteer",
   testRegex: "./*\\.e2e\\.js$",
-  testTimeout: 30000,
+  testTimeout: 10000,
 };

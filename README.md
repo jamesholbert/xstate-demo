@@ -1,70 +1,23 @@
-# Getting Started with Create React App
+# My xstate/state and xstate/test machine demo
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## navigating app
 
-## Available Scripts
+`yarn start`
 
-In the project directory, you can run:
+to switch between the different versions of App with different methods of handling state, toggle the commented imports in `index.js`
 
-### `yarn start`
+## running tests
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+`yarn e2e`
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+AppWithModernState.js has a bug intentionally left in that is discovered via the auto-generated tests in `app.e2e.js` (it actually _was_ an unintentional bug, which is perfect for this illustration)
 
-### `yarn test`
+tweak the referenced section in `app.e2e.js` to configure how many tests you want automatically self generated
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+the testMachine has verbose extra states, this is in part to ensure every possible state is *hit* to ensure every transition is accomplished and also in part due to my novice understanding of state machines :) but it gets the job done (I plan to fix this in the future)
 
-### `yarn build`
+I also added an extra context variable in the testmachine to track the number of actions, this way the auto-generated tests can be configured to test beyond the "minimum" amount of state transitions between the possible states by backtracking, otherwise, without context, it wouldn't backtrack any more than necessary.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## TL:DR:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Run the app, toggle which App you import, and run the tests to see the model based testing in action.
