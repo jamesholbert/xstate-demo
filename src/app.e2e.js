@@ -19,6 +19,7 @@ describe("light switch", () => {
   });
 
   // this lets you generate a filter that limits the number of "paths" (or tests) generated so you don't have a stack overflow
+  // let's stay friends and leave a limit to this; to quote Count Rugan: "Not to 50!" (please not even to 20 :grimacing:)
   const withActionCountLessThan = count => state => state.context.actions < count;
   // this lets you generate a filter that will limit "paths" to only include those with a given number of actions
   const withActionCounts = array => path => array.includes(path.state.context.actions);
@@ -31,10 +32,19 @@ describe("light switch", () => {
     filter: withActionCountLessThan(10)
   });
 
+  // if you have a lot of possible paths in your app and `getSimplePathPlans` generates too many paths, 
+  // try this, but you'll probably want to comment out the `withActionCounts` filter below
+  
+  // const testPlans = testModel.getSimplePathPlans({
+  //   filter: withActionCountLessThan(10)
+  // });
+
+  console.log(`Total tests generated: ${testPlans.reduce((a, c) => a += c.paths.length, 0)}`);
+
   testPlans.forEach((plan, planNumber) => {
     describe(plan.description, () => {
       plan.paths
-        .filter(withActionCounts([3, 4]))
+        .filter(withActionCounts([3, 4])) // this probably isn't necessary if you are using `getShortestPathPlans`
         .filter(endsInState("broken"))
         .forEach((path, i) => {
           it(
