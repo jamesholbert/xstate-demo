@@ -7,9 +7,9 @@ const logAction = assign({
 const testMachine = Machine({
   id: "main",
   initial: "electricityOnAndSwitchOff",
-  context: {
-    actions: 0
-  },
+  // context: {
+  //   actions: 0
+  // },
   states: {
     electricityOnAndSwitchOff: {
       meta: {
@@ -22,15 +22,15 @@ const testMachine = Machine({
       on: {
         TOGGLE: {
           target: "on",
-          actions: logAction
+          // actions: logAction
         },
         FLIP_BREAKER: {
           target: "electricityOffAndSwitchOff",
-          actions: logAction
+          // actions: logAction
         },
         TOUCH_LIGHT: {
           target: "broken",
-          actions: logAction
+          // actions: logAction
         }
       },
     },
@@ -45,15 +45,15 @@ const testMachine = Machine({
       on: {
         TOGGLE: {
           target: "electricityOffAndSwitchOff",
-          actions: logAction
+          // actions: logAction
         },
         FLIP_BREAKER: {
           target: "on",
-          actions: logAction
+          // actions: logAction
         },
         TOUCH_LIGHT: {
           target: "broken",
-          actions: logAction
+          // actions: logAction
         }
       },
     },
@@ -68,15 +68,15 @@ const testMachine = Machine({
       on: {
         TOGGLE: {
           target: "electricityOffAndSwitchOn",
-          actions: logAction
+          // actions: logAction
         },
         FLIP_BREAKER: {
           target: "electricityOnAndSwitchOff",
-          actions: logAction
+          // actions: logAction
         },
         TOUCH_LIGHT: {
           target: "broken",
-          actions: logAction
+          // actions: logAction
         }
       },
     },
@@ -90,15 +90,15 @@ const testMachine = Machine({
       on: {
         TOGGLE: {
           target: "electricityOnAndSwitchOff",
-          actions: logAction
+          // actions: logAction
         },
         FLIP_BREAKER: {
           target: "electricityOffAndSwitchOn",
-          actions: logAction
+          // actions: logAction
         },
         TOUCH_LIGHT: {
           target: "broken",
-          actions: logAction
+          // actions: logAction
         }
       }
     },

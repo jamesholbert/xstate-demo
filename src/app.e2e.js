@@ -26,15 +26,18 @@ describe("light switch", () => {
   // this lets you generate a filter to will limit "paths" to only include those that end in a given state
   const endsInState = state => path => path.state.matches(state)
 
+// console.log(testModel)
   // change one or more of the filter method params below to experiment with how many tests are automatically generated
-
-  const testPlans = testModel.getSimplePathPlans({
-    filter: withActionCountLessThan(10)
-  });
+  // const testPlans = testModel.getSimplePathPlans({
+  //   filter: withActionCountLessThan(10)
+  // });
 
   // if you have a lot of possible paths in your app and `getSimplePathPlans` generates too many paths, 
   // try this, but you'll probably want to comment out the `withActionCounts` filter below
-  
+
+  const testPlans = testModel.getSimplePathPlansTo(
+    state => state.matches("broken")
+  );
   // const testPlans = testModel.getSimplePathPlans({
   //   filter: withActionCountLessThan(10)
   // });
@@ -44,8 +47,8 @@ describe("light switch", () => {
   testPlans.forEach((plan, planNumber) => {
     describe(plan.description, () => {
       plan.paths
-        .filter(withActionCounts([3, 4])) // this probably isn't necessary if you are using `getShortestPathPlans`
-        .filter(endsInState("broken"))
+        // .filter(withActionCounts([3, 4])) // this probably isn't necessary if you are using `getShortestPathPlans`
+        // .filter(endsInState("broken"))
         .forEach((path, i) => {
           it(
             path.description,
