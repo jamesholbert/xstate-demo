@@ -2,6 +2,7 @@ const { Machine, assign } = require("xstate");
 
 const hasElectricity = (context, _event) => context.hasElectricity
 const switchIsOn = (context, _event) => context.switchIsOn
+const switchAndElecOn = context => context.hasElectricity && context.switchIsOn;
 
 const toggleSwitchContext = assign({
   switchIsOn: (context) => !context.switchIsOn
@@ -78,18 +79,35 @@ const testMachine = Machine({
       }
     },
     broken: {
-      type: "final",
+      // type: "final",
       meta: {
         test: async page => {
           await page.waitForSelector('.light.broken');
           await page.waitForSelector('.room.unlit');
         },
       },
+      on: {
+        TOGGLE: {
+          actions: "toggleSwitchContext"
+        },
+        FLIP_BREAKER: {
+          actions: "flipBreakerContext"
+        },
+        TOUCH_LIGHT: [
+          {
+            cond: "switchAndElecOn",
+            target: "on"
+          },
+          {
+            target: "off"
+          }
+        ]
+      }      
     }
   }
 },{
   guards: {
-    hasElectricity, switchIsOn
+    hasElectricity, switchIsOn, switchAndElecOn
   },
   actions: {
     toggleSwitchContext, flipBreakerContext

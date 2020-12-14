@@ -1,7 +1,8 @@
 import { Machine, assign } from "xstate";
 
-const hasElectricity = (context, _event) => context.hasElectricity
-const switchIsOn = (context, _event) => context.switchIsOn
+const hasElectricity = (context, _event) => context.hasElectricity;
+const switchIsOn = (context, _event) => context.switchIsOn;
+const switchAndElecOn = context => context.hasElectricity && context.switchIsOn;
 
 const toggleSwitchContext = assign({
   switchIsOn: (context) => !context.switchIsOn
@@ -40,7 +41,7 @@ const lightMachine = Machine({
             target: "on"
           },
           {
-            actions: "flipBreakerContext"            
+            actions: "flipBreakerContext"
           }
         ]
       }
@@ -61,11 +62,29 @@ const lightMachine = Machine({
         },
       }
     },
-    broken: {}
+    broken: {
+      on: {
+        TOGGLE: {
+          actions: "toggleSwitchContext"
+        },
+        FLIP_BREAKER: {
+          actions: "flipBreakerContext"
+        },
+        TOUCH: [
+          {
+            cond: "switchAndElecOn",
+            target: "on"
+          },
+          {
+            target: "off"
+          }
+        ]
+      }
+    }
   },
 },{
   guards: {
-    hasElectricity, switchIsOn
+    hasElectricity, switchIsOn, switchAndElecOn
   },
   actions: {
   	toggleSwitchContext, flipBreakerContext
