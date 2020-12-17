@@ -23,17 +23,25 @@ describe("light switch", () => {
 
 
   // get all possible paths to the `broken` state
+
   // const testPlans = testModel.getSimplePathPlansTo(
   //   state => state.matches("broken")
   // );
 
+  // const testPlans = testModel.getSimplePathPlansTo(
+  //   state => state.matches("broken") && state.context.hasElectricity
+  // );
+
+
   // get all possible paths where every state/transition keeps the `hasElectricity` context value as truthy
+
   // const testPlans = testModel.getSimplePathPlans({
   //   filter: state => state.context.hasElectricity
   // });
 
 
   // the `getShortestPathPlans` method can end up missing states if you aren't careful
+  
   // const testPlans = testModel.getShortestPathPlans();
 
   // const testPlans = testModel.getShortestPathPlansTo(
