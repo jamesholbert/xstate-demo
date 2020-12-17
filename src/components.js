@@ -1,5 +1,11 @@
 import React from "react";
 
+import breakerOff from "./breakeroff.png";
+import breakerOn from "./breakeron.png";
+import lightOff from "./lightoff.jpg";
+import lightOn from "./lighton.jpg";
+import lightBroken from "./broken.png";
+
 const imageStyles = { height: "250px" };
 
 export const Breaker = ({ on, onClick }) => (
@@ -45,8 +51,8 @@ export const YouWin = () => <div style={{ position: "absolute", top: "1rem", rig
 
 
 const breaker = {
-  on: "https://lion.ly/2Q7",
-  off: "https://lion.ly/2Q8"
+  on: breakerOn,
+  off: breakerOff
 };
 
 const lightSwitch = {
@@ -55,7 +61,7 @@ const lightSwitch = {
 };
 
 const light = {
-  on: "https://lion.ly/2Qb",
-  off: "https://lion.ly/2Qc",
-  broken: "https://lion.ly/2Qd"
+  on: lightOn,
+  off: lightOff,
+  broken: lightBroken
 }
