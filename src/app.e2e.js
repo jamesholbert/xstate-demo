@@ -22,6 +22,45 @@ describe("light switch", () => {
   const testPlans = testModel.getSimplePathPlans();
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   // get all possible paths to the `broken` state
 
   // const testPlans = testModel.getSimplePathPlansTo(

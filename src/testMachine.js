@@ -55,12 +55,11 @@ const testMachine = Machine({
       }
     },
     on: {
-      meta: {
-        test: async page => {
-          await page.waitForSelector('.light.on');
-          await page.waitForSelector('.room.lit');
-        },
-      },
+      /* 
+
+        add meta checks for the .light.on and .room.lit
+
+      */
       on: {
         TOUCH_LIGHT: "broken",
         TOGGLE: {

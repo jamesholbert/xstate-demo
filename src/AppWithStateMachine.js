@@ -12,14 +12,7 @@ const App = () => {
   return (
     <div className={`room ${current.matches("on") ? "lit" : "unlit"}`} style={{ backgroundColor: current.matches("on") ? 'white' : "black" }}>
       <header className="App-header">
-        <Breaker 
-          on={hasElectricity}
-          onClick={() => send({ type: "FLIP_BREAKER" })}
-        />
-        <Switch 
-          on={switchIsOn}
-          onClick={() => send("TOGGLE")}
-        />
+        {/* Add Breaker and Switch components */}
         <Light 
           on={current.matches("on")}
           broken={current.matches("broken")}

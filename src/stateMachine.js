@@ -1,15 +1,17 @@
 import { Machine, assign } from "xstate";
 
+// guards
 const hasElectricity = (context, _event) => context.hasElectricity
 const switchIsOn = (context, _event) => context.switchIsOn
 
+// actions
 const toggleSwitchContext = assign({
   switchIsOn: (context) => !context.switchIsOn
 });
 const flipBreakerContext = assign({
   hasElectricity: (context) => !context.hasElectricity   
 });
-  
+
 const lightMachine = Machine({
   id: 'lightSwitch',
   initial: 'off',
@@ -24,14 +26,11 @@ const lightMachine = Machine({
     off: {
       on: {
         TOGGLE: [
-          {
-            cond: "hasElectricity",
-            actions: "toggleSwitchContext",
-            target: "on"
-          },
-          {
-            actions: "toggleSwitchContext"
-          }
+        /*
+
+          if electricity is on, transition to `on` otherwise, just flip the switch
+
+        */
         ],
         FLIP_BREAKER: [
           {

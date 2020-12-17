@@ -37,6 +37,26 @@ const App = () => {
 
 export default App;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // in the case of this version of App, our test machine is in fact modeled
 // correctly to reflect the behavior we want out of our App.  The App, however,
 // has a bug. That being the `lightIsOn` variable, which is one of the two
